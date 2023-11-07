@@ -38,6 +38,14 @@ const listaProductos = document.querySelector('#catalogo');
 listaProductos.addEventListener('click', (e) => {
     if (e.target.classList.contains('btnAgregarCarrito')) {
 
+        Toastify({
+
+            text: "Producto agregado",
+
+            duration: 3000
+
+        }).showToast();
+
         const productoElegido = e.target.dataset.id;
 
         agregarCarrito(productoElegido)

@@ -18,35 +18,54 @@ arrayCarrito = []
 arrayCarrito = JSON.parse(carritoAlmacenado)
 
 let listaCarrito = document.querySelector('#carrito')
-let flag = 0
+let carritoVacio = document.querySelector('#carrito-vacio')
+
+let precioTotal = 0
+
+const verificarContenido = document.getElementById('seccion-carrito-pago')
 actualizarCarrito()
 
 function actualizarCarrito() {
 
     if (arrayCarrito == null || arrayCarrito.length == 0) {
+        verificarContenido.remove()
+        listaCarrito.remove()
 
         let contenedor = document.createElement('div')
         contenedor.className = 'carrito-vacio'
         contenedor.innerHTML = `
-        <h3>El carrito está vacio ;(</h3>
+        <h3>El carrito está vacio 🙁</h3>
         `
-        listaCarrito.appendChild(contenedor)
-        flag = 1
+        carritoVacio.appendChild(contenedor)
 
     }
     else {
-        arrayCarrito.forEach(producto => {
-            let lista = document.createElement('li')
-            lista.classList.add('carrito')
-            lista.innerHTML = `
+
+        precioTotal = actualizarTotal()
+
+        agregarElementosCarrito(precioTotal)
+    }
+}
+
+function agregarElementosCarrito(total) {
+    arrayCarrito.forEach(producto => {
+        let lista = document.createElement('li')
+        lista.classList.add('carrito')
+        lista.innerHTML = `
                 <h3>${producto.nombre}</h3>
                 <p>CANTIDAD: ${producto.cantidad}</p> 
-                <p>$${producto.precio}</p>                 
-                <button class="btnEliminarCarrito botonesProductos" data-id='${producto.id}'>Eliminar del carrito</button>
+                <p>$${producto.precio}</p>
             `
-            listaCarrito.appendChild(lista)
-        });
-    }
+        listaCarrito.appendChild(lista)
+    });
+
+    let precio = document.createElement('div')
+    precio.classList.add('carrito')
+    precio.innerHTML = `
+                <h3>Total: </h3>
+                <p>$${total}</p>
+            `
+    listaCarrito.appendChild(precio)
 }
 
 
@@ -65,10 +84,11 @@ for (let t of arrayTarjetas) {
     listaTarjetas.appendChild(tarjetas)
 }
 
+
 const confirmarCompra = document.getElementById('confirmarCompra')
 
-if (arrayCarrito == null) {
-    confirmarCompra.style.display = 'none'
+if (arrayCarrito == null || arrayCarrito.length == 0) {
+    verificarContenido.remove()
 }
 
 confirmarCompra.addEventListener('click', () => {
@@ -78,15 +98,21 @@ confirmarCompra.addEventListener('click', () => {
     let tarjeta = arrayTarjetas.find((t) => t.nombre == tarjetaElegida)
 
     if (tarjeta != undefined) {
-
-        let precioTotal = actualizarTotal()
-        alert(`El total de la compra es de $${calcularTotal(precioTotal, tarjeta.descuento)}`)
         localStorage.removeItem("carrito")
         arrayCarrito = []
-        location.reload()
+        actualizarCarrito()
+        Swal.fire({
+            title: `Compra realizada`,
+            text: `El total de la compra es $${calcularTotal(precioTotal, tarjeta.descuento)}`,
+            icon: "success"
+        });
     }
     else {
-        alert('Esa tarjeta no existe')
+        Swal.fire({
+            title: `Esa tarjeta no existe`,
+            text: `Intente de nuevo`,
+            icon: "error"
+        });
     }
     tarjetaInput.value = ''
 })
@@ -95,6 +121,7 @@ function actualizarTotal() {
     const totalCalculado = arrayCarrito.reduce((acc, producto) => acc + (producto.precio * producto.cantidad), 0);
     return totalCalculado
 }
+
 function calcularTotal(total, tarjeta) {
 
     let final = total * tarjeta
@@ -102,4 +129,3 @@ function calcularTotal(total, tarjeta) {
 
     return final
 }
-

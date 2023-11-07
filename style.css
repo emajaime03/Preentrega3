@@ -130,6 +130,7 @@ header {
 
 .seccion-carrito {
     display: flex;
+    justify-content: center;
     gap: 50px;
 }
 

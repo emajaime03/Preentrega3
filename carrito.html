@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="./style.css">
-    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Mauligam | carrito</title>
 </head>
 
 <body>
@@ -21,13 +23,13 @@
 
     <main>
         <section class="seccion-carrito">
-            <div class="seccion-carrito-pago">
+            <div class="seccion-carrito-pago" id="carrito-vacio">
                 <ul class="productos" id="carrito">
 
                 </ul>
             </div>
 
-            <div class="seccion-carrito-pago">
+            <div class="seccion-carrito-pago" id="seccion-carrito-pago">
                 <h2>PAGO</h2>
                 <h2>Ingrese el nombre de la tarjeta de su preferencia y presione comprar</h2>
 
@@ -41,6 +43,7 @@
 
     </main>
 
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="./carrito.js"></script>
 </body>
 
